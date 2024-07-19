@@ -5,27 +5,19 @@ const express = require('express');
 const User = require('../models/users'); // Ensure the path is correct
 const router = express.Router();
 // Extract everything from the request query
-router.get('/', async (req, res) => { 
+router.get('/:id', async (req, res) => { 
     try {
-        //Find all users and create a list(report_users)
-        const allUsers = await User.find({});
-        const user_report = { users: [] };
-
-        // Iterate over each user and push to the report array
-        for (const user of allUsers) {
-            user_report.users.push({
-                // id: user.id,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                // birthday: user.birthday
-            });
+        const userId = req.params.id;
+        const user = await User.findOne({ id: userId }); // Assuming your database uses 'id' field to store user id
+        if (user) {
+            res.json(user);
+        } else {
+            res.status(404).send('User not found');
         }
-        //IF SUCCESS
-        res.status(200).json(user_report);
-    } 
+    }
     //ELSE(ERROR)
     catch (error) {
-        console.error('Error retrieving users:', error);
+        console.error('Error retrieving user:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });

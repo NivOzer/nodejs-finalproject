@@ -2,12 +2,16 @@
 //Omri Shema, id: 313380479
 //requirements
 const mongoose = require('mongoose');
+const express = require('express');
+const router = express.Router();
 const Schema = mongoose.Schema;
-//New Scheme creation
+
+// New Schema creation
 const usersSchema = new Schema({
     id: {
         type: Number,
-        required: true
+        required: true,
+        unique: true
     },
     firstname: {
         type: String,
@@ -21,7 +25,8 @@ const usersSchema = new Schema({
         type: String,
         required: true
     },
-},{ versionKey: false });
-const user = mongoose.model('users',usersSchema);
+}, { versionKey: false });
 
-module.exports = user;
+const User = mongoose.model('users', usersSchema);
+
+module.exports = User;
